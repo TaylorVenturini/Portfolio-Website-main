@@ -1,0 +1,14 @@
+body {
+  background: black;
+  font-family: sans-serif;
+}
+
+h1 {
+  color: red;
+}
+img {
+  width: 500px;
+  max-width: 100%;
+  border: 1px solid silver;
+  border-radius: 20px;
+}
