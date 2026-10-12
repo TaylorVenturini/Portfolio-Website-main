@@ -12,3 +12,11 @@ img {
   border: 1px solid silver;
   border-radius: 20px;
 }
+
+* {
+  cursor: url("chip-cursor.png") 24 24, auto;
+}
+
+*:active {
+  cursor: url("chip-bitten.png") 24 24, auto;
+}

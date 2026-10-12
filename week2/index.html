@@ -3,6 +3,22 @@
   <head>
     <link rel="stylesheet" href="style.css">
   </head>
+  <script>
+  const sounds = [
+    new Audio("chomp1.m4a"),
+    new Audio("chomp2.m4a"),
+    new Audio("chomp3.m4a")
+  ];
+  let current = 0;
+
+  document.addEventListener("click", function () {
+    const sound = sounds[current];
+    sound.currentTime = 0;
+    sound.play();
+
+    current = (current + 1) % sounds.length;
+  });
+</script>
   <body>
     <h1>⭐︎ Open Portal ⭐︎</h1>
     <img src="chip-bunny.jpeg" alt="A glowing portal">
