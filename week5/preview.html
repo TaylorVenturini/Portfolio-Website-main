@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    body.preview-page { background: #000; overflow: hidden; }
+
+    #stage {
+      position: relative;
+      width: 100vmin;
+      height: 100vmin;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3vmin;
+      font-family: Georgia, serif;
+    }
+
+    /* the ruined-day meter at the top */
+    #bar {
+      width: 70vmin;
+      height: 2.6vmin;
+      border: 0.5vmin solid #9646ff;
+      background: #000;
+    }
+    #fill {
+      height: 100%;
+      width: 0%;
+      background: #ff1e3c;
+      transition: width 0.4s;
+    }
+
+    #frame {
+      width: 62vmin;
+      height: 52vmin;
+      border: 0.7vmin solid #9646ff;
+      box-shadow: 0 0 5vmin rgba(150, 70, 255, 0.6);
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #photo { max-width: 100%; max-height: 100%; display: block; }
+
+    #text {
+      width: 74vmin;
+      height: 12vmin;
+      color: #fff;
+      font-size: 4.4vmin;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    /* each new bad thing pops in */
+    .pop { animation: pop 0.3s ease-out; }
+    @keyframes pop {
+      from { transform: scale(0.6) rotate(-6deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    /* the more it's ruined, the more it shakes */
+    .w1 #frame { animation: wobble 0.9s ease-in-out infinite; }
+    .w2 #frame { animation: wobble 0.5s ease-in-out infinite; }
+    .w3 #frame { animation: shake 0.3s linear infinite; }
+    @keyframes wobble { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+    @keyframes shake {
+      0%   { transform: translate(2px, 1px); }
+      25%  { transform: translate(-2px, -1px) rotate(-1deg); }
+      50%  { transform: translate(1px, 2px) rotate(1deg); }
+      75%  { transform: translate(-1px, -2px); }
+      100% { transform: translate(2px, 1px); }
+    }
+    .w2 { filter: saturate(1.5); }
+    .w3 { filter: saturate(2) contrast(1.2) hue-rotate(-12deg); }
+
+    #stage.out { opacity: 0; transition: opacity 0.5s; }
+  </style>
+</head>
+
+<body class="preview-page">
+  <div id="stage">
+    <div id="bar"><div id="fill"></div></div>
+    <div id="frame"><img id="photo" alt=""></div>
+    <p id="text"></p>
+  </div>
+
+  <script>
+    // same photos and a few of the same bad things as the real page
+    const photoCount = 38;
+    const lines = [
+      "Your phone is at 1%. The charger is in another building.",
+      "You stepped in a puddle. Wearing socks.",
+      "The wifi is connected but it is lying to you.",
+      "A tiny rock in your shoe. Forever.",
+      "A pop-up appeared. It has no X button.",
+      "Everyone else already understood the assignment.",
+      "The chips are all crumbs. Only crumbs.",
+      "Your screen cracked. A new crack. Next to the old crack."
+    ];
+
+    const stage = document.getElementById("stage");
+    const photo = document.getElementById("photo");
+    const frame = document.getElementById("frame");
+    const text = document.getElementById("text");
+    const fill = document.getElementById("fill");
+
+    let n = 0;       // how many clicks so far this "day"
+    let order = [];  // shuffled photo numbers
+
+    function nextPhoto() {
+      if (order.length === 0) {
+        for (let i = 1; i <= photoCount; i++) order.push(i);
+        order.sort(function () { return Math.random() - 0.5; });
+      }
+      return "memes/meme-" + String(order.pop()).padStart(2, "0") + ".jpg";
+    }
+
+    function click() {
+      n++;
+      const line = lines[(n - 1) % lines.length];
+
+      // swap in the next photo only once it has loaded
+      const url = nextPhoto();
+      const test = new Image();
+      test.onload = function () {
+        photo.src = url;
+        frame.classList.remove("pop");
+        text.classList.remove("pop");
+        void frame.offsetWidth;
+        frame.classList.add("pop");
+        text.classList.add("pop");
+      };
+      test.src = url;
+
+      text.textContent = line;
+      fill.style.width = Math.min(100, n * 14) + "%";
+      stage.className = n >= 6 ? "w3" : n >= 4 ? "w2" : n >= 2 ? "w1" : "";
+    }
+
+    function newDay() {
+      n = 0;
+      stage.className = "";
+      fill.style.width = "0%";
+      text.textContent = "Everything is fine. For now.";
+      photo.removeAttribute("src");
+    }
+
+    // click, click, click... then everything fades and a new day starts
+    function loop() {
+      newDay();
+      let t = 900;
+      for (let i = 0; i < 7; i++) {
+        setTimeout(click, t);
+        t += 1100;
+      }
+      setTimeout(function () { stage.classList.add("out"); }, t + 600);
+      setTimeout(function () { stage.classList.remove("out"); loop(); }, t + 1200);
+    }
+    loop();
+  </script>
+</body>
+
+</html>

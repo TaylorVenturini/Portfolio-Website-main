@@ -5,46 +5,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Week 1 - Code as Nature · Fall 2026</title>
+  <title>Week 5 - Make It Worse · Fall 2026</title>
 
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
   <header>
-    <h1>Week 5: Nature Computes</h1>
+    <h1>Week 5: Make It Worse</h1>
   </header>
 
   <main>
-    <h2>Meme Generator</h2>
+    <h2>The Day Ruiner</h2>
+    <p id="meter">Your day is 0% ruined.</p>
 
-  
-  <div class="meme">
-  <img class="meme-image" id="meme-image" src="" alt="Random meme">
-  <p class="meme-text" id="meme-text">Click the button.</p>
-</div>
-<br>
-<button id="generate-button">[ Generate Meme ]</button>
+    <div class="meme" id="meme">
+      <div class="meme-frame">
+        <img class="meme-image" id="meme-image" alt="" hidden>
+        <div class="meme-fallback" id="meme-fallback">🙂</div>
+      </div>
+      <p class="meme-text" id="meme-text">Everything is fine. For now.</p>
+    </div>
 
-<script src="script.js"></script>
+    <button id="generate-button">[ Make It Worse ]</button>
+    <button id="reset-button" hidden>[ Start A New Day ]</button>
+
+    <ol id="log" class="log"></ol>
   </main>
 
-<footer>
+  <footer>
+    <nav class="page-nav">
+      <a href="../index.html">[ RETURN HOME ]</a>
+      <a href="javascript:history.back()">[ GO BACK ]</a>
+    </nav>
+    <p>Code as Nature · Fall 2026</p>
+  </footer>
 
-  <nav class="page-nav">
-    <a href="../index.html">[ RETURN HOME ]</a>
-    <a href="javascript:history.back()">[ GO BACK ]</a>
-  </nav>
-
-  <p>Code as Nature · Fall 2026</p>
-
-</footer>
-
-  <!-- Load the p5.js library -->
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
-
-  <!-- Load our own code -->
   <script src="sketch.js"></script>
 
 </body>

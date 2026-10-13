@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Load the main stylesheet from one folder above -->
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    /* same dark purple as the shrine page */
+    body.preview-page {
+      background: #14101f;
+    }
+
+    /* a square stage that fills the preview, so every size is in vmin */
+    #stage {
+      position: relative;
+      width: 100vmin;
+      height: 100vmin;
+    }
+
+    #photo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 31vmin;
+      transform: translate(-50%, -50%);
+      border-radius: 1vmin;
+      box-shadow: 0 0 6vmin rgba(255, 190, 80, 0.55);
+    }
+
+    .win {
+      position: absolute;
+      width: 21vmin;
+      background: #2a2238;
+      border: 0.3vmin solid #5a4a78;
+      border-radius: 2vmin;
+      overflow: hidden;
+      box-shadow: 0 1vmin 3vmin rgba(0, 0, 0, 0.5);
+      transform: rotate(var(--tilt));
+      animation: pop 0.3s ease-out;
+      transition: opacity 0.6s;
+    }
+
+    .win.candle {
+      width: 17vmin;
+    }
+
+    .win.out {
+      opacity: 0;
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(0.3) rotate(var(--tilt)); }
+      to   { opacity: 1; transform: scale(1) rotate(var(--tilt)); }
+    }
+
+    .bar {
+      background: #1e1830;
+      padding: 1.2vmin 1.6vmin;
+      line-height: 0;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 1.8vmin;
+      height: 1.8vmin;
+      margin-right: 1vmin;
+      border-radius: 50%;
+      background: #4a4060;
+    }
+
+    .dot.red {
+      background: #d9645a;
+    }
+
+    .face {
+      text-align: center;
+      font-size: 9vmin;
+      line-height: 1;
+      padding: 1.8vmin 0;
+    }
+
+    .candle .face {
+      font-size: 13vmin;
+      padding: 2.4vmin 0;
+    }
+  </style>
+</head>
+
+<body class="preview-page">
+
+  <div id="stage">
+    <img id="photo" src="preview-photo.jpg" alt="">
+  </div>
+
+  <script>
+    const stage = document.getElementById("stage");
+
+    // the same order as the real shrine: each wave is bigger than the last
+    const waves = [
+      { size: "candle", count: 3, emoji: ["🕯️"] },
+      { size: "small",  count: 5, emoji: ["🌸", "🥀", "🌷", "🌼", "💐"] },
+      { size: "small",  count: 7, emoji: ["🔋", "🔌", "💾", "☕", "🧁", "🍕", "🥤"] }
+    ];
+
+    // a seeded random, so the pile looks the same every loop
+    function makeRandom(seed) {
+      return function () {
+        seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+        let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+        t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      };
+    }
+
+    // the photo sits in the middle, so keep windows off it
+    const photoBox = { left: 31, top: 24, right: 69, bottom: 76 };
+    let layer = 1;
+
+    function addWindow(wave, rand, index) {
+      const w = wave.size === "candle" ? 17 : 21;
+      const h = wave.size === "candle" ? 27 : 17;
+
+      let x = 0, y = 0;
+      for (let tries = 0; tries < 60; tries++) {
+        x = rand() * (100 - w);
+        y = rand() * (100 - h);
+        const hitsPhoto =
+          x < photoBox.right && x + w > photoBox.left &&
+          y < photoBox.bottom && y + h > photoBox.top;
+        if (!hitsPhoto) break;
+      }
+
+      const win = document.createElement("div");
+      win.className = "win" + (wave.size === "candle" ? " candle" : "");
+      win.style.left = x + "vmin";
+      win.style.top = y + "vmin";
+      win.style.zIndex = ++layer;           // newest always on top
+      win.style.setProperty("--tilt", (rand() * 12 - 6) + "deg");
+      win.innerHTML =
+        '<div class="bar"><span class="dot red"></span><span class="dot"></span><span class="dot"></span></div>' +
+        '<div class="face">' + wave.emoji[index % wave.emoji.length] + '</div>';
+      stage.appendChild(win);
+    }
+
+    function loop() {
+      const rand = makeRandom(7);
+      layer = 1;
+      let delay = 500;
+
+      waves.forEach(function (wave) {
+        for (let i = 0; i < wave.count; i++) {
+          setTimeout(function () { addWindow(wave, rand, i); }, delay + i * 140);
+        }
+        delay += wave.count * 140 + 1000;   // pause before the next wave
+      });
+
+      // hold the finished pile, then clear it and start over
+      setTimeout(function () {
+        document.querySelectorAll(".win").forEach(function (w) { w.classList.add("out"); });
+      }, delay + 1200);
+
+      setTimeout(function () {
+        document.querySelectorAll(".win").forEach(function (w) { w.remove(); });
+        loop();
+      }, delay + 2000);
+    }
+
+    loop();
+  </script>
+
+</body>
+
+</html>

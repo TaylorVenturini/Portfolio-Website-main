@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Load the main stylesheet from one folder above -->
+  <link rel="stylesheet" href="../style.css">
+
+  <!--
+  This sketch is 640 x 480, which is wider than the square preview,
+  so we shrink the canvas to fit instead of cropping it.
+  -->
+  <style>
+    .preview-page canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+  </style>
+</head>
+
+<body class="preview-page">
+
+  <!-- Tell sketch.js that it is running as a homepage preview -->
+  <script>
+    window.previewMode = true;
+  </script>
+
+  <!-- Load the p5.js library (no webcam or ml5 needed for the preview) -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
+
+  <!-- Load our sketch -->
+  <script src="sketch.js"></script>
+
+</body>
+
+</html>

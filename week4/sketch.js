@@ -18,7 +18,10 @@ let phrase = "TENSE INDIGO BUMP de DUMP GARDEN ";
 let charCount = 0;
 
 function preload() {
-  faceMesh = ml5.faceMesh({ maxFaces: 1, flipped: true });
+  // The homepage preview skips the webcam and face tracking
+  if (!window.previewMode) {
+    faceMesh = ml5.faceMesh({ maxFaces: 1, flipped: true });
+  }
 }
 
 function gotFaces(results) {
@@ -32,11 +35,13 @@ function setup() {
   textFont("Georgia");
   textStyle(BOLD);
 
-  video = createCapture(VIDEO, { flipped: true });
-  video.size(width, height);
-  video.hide();
+  if (!window.previewMode) {
+    video = createCapture(VIDEO, { flipped: true });
+    video.size(width, height);
+    video.hide();
 
-  faceMesh.detectStart(video, gotFaces);
+    faceMesh.detectStart(video, gotFaces);
+  }
 
   center = createVector(width / 2, height / 2);
 
@@ -91,6 +96,15 @@ function draw() {
 }
 
 function updateMouthTracking() {
+  // In the homepage preview there is no face, so a pretend mouth
+  // drifts around and opens and closes by itself
+  if (window.previewMode) {
+    mouthX = width / 2 + cos(frameCount * 0.02) * 150;
+    mouthY = height / 2 + sin(frameCount * 0.03) * 100;
+    mouthOpen = 6 + (sin(frameCount * 0.05) + 1) * 17;
+    return;
+  }
+
   if (faces.length > 0) {
     let face = faces[0];
     let keypoints = face.keypoints;
