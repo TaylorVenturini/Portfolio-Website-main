@@ -1,0 +1,132 @@
+body {
+  background: #14101f;
+  color: #f3e9d2;
+  font-family: Georgia, serif;
+  text-align: center;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  font-style: italic;
+  color: #ffd76a;
+  text-shadow: 0 0 18px rgba(255, 190, 80, 0.7);
+}
+
+.hidden {
+  display: none;
+}
+
+#setup {
+  margin-top: 40px;
+}
+
+#nameInput {
+  font-size: 16px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #5a4a78;
+  background: #2a2238;
+  color: #f3e9d2;
+  width: 260px;
+  max-width: 90%;
+}
+
+.upload-button,
+button {
+  display: inline-block;
+  margin: 14px 6px 0;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-family: Georgia, serif;
+  color: #14101f;
+  background: #ffd76a;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.upload-button input {
+  display: none;
+}
+
+#stage {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  height: 720px;
+  margin: 20px auto 0;
+}
+
+#photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 300px;
+  max-height: 420px;
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgba(255, 190, 80, 0.5);
+}
+
+.window {
+  position: absolute;
+  width: 170px;
+  background: #2a2238;
+  border: 1px solid #5a4a78;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  transform: rotate(var(--tilt, 0deg));
+  animation: popIn 0.35s ease-out;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.3) rotate(var(--tilt, 0deg)); }
+  to   { opacity: 1; transform: scale(1) rotate(var(--tilt, 0deg)); }
+}
+
+.titlebar {
+  background: #1e1830;
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #4a4060;
+}
+
+.dot.close {
+  background: #d9645a;
+  cursor: pointer;
+}
+
+.body {
+  padding: 12px;
+}
+
+.body.offering {
+  font-size: 48px;
+}
+
+.body.message {
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+  line-height: 1.4;
+}
+
+#caption {
+  font-style: italic;
+  font-size: 20px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

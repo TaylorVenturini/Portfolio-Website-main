@@ -1,9 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <script>
-    window.location.replace("../404.html");
-  </script>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rest in Pieces</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>🕯️ Rest in Pieces 🕯️</h1>
+
+     <div id="setup">
+      <p id="prompt">What device are we mourning today?</p>
+      <input type="text" id="nameInput" placeholder="its name (ex: my cracked iPhone 11)">
+      <br>
+      <label class="upload-button">
+        Upload a photo of the dearly departed
+        <input type="file" id="fileInput" accept="image/*">
+      </label>
+    </div>
+
+    <div id="stage" class="hidden">
+      <img id="photo" alt="The departed">
+    </div>
+
+    <div id="controls" class="hidden">
+      <p id="caption"></p>
+      <button id="offerButton">Leave an offering</button>
+      <button id="restartButton">Make another shrine</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
