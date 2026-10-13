@@ -3,24 +3,109 @@
   <head>
     <link rel="stylesheet" href="style.css">
   </head>
-  <script>
-  const sounds = [
-    new Audio("chomp1.m4a"),
-    new Audio("chomp2.m4a"),
-    new Audio("chomp3.m4a")
-  ];
-  let current = 0;
-
-  document.addEventListener("click", function () {
-    const sound = sounds[current];
-    sound.currentTime = 0;
-    sound.play();
-
-    current = (current + 1) % sounds.length;
-  });
-</script>
   <body>
-    <h1>⭐︎ Open Portal ⭐︎</h1>
-    <img src="chip-bunny.jpeg" alt="A glowing portal">
+    <h1>☆ Open Portal ☆</h1>
+    <img src="chip-bunny.jpeg" class="chip-bunny" alt="A bunny eating chips">
+
+    <div class="portal">
+      <img src="ddorerock_normal.png" class="photo" alt="A fluffy bunny on a couch">
+      <img src="ddorerock_chip_cutout.png" class="bunny" alt="The bunny wearing a bag of chips">
+    </div>
+
+    <script>
+      const sounds = [
+        new Audio("chomp1.m4a"),
+        new Audio("chomp2.m4a"),
+        new Audio("chomp3.m4a")
+      ];
+      let current = 0;
+
+      document.addEventListener("click", function () {
+        const sound = sounds[current];
+        sound.currentTime = 0;
+        sound.play();
+
+        current = (current + 1) % sounds.length;
+      });
+
+      function makeStar(x, y, dx, dy, size) {
+        const star = document.createElement("div");
+        star.className = "sparkle";
+        star.textContent = "✦";
+        star.style.left = x + "px";
+        star.style.top = y + "px";
+        star.style.fontSize = size + "px";
+        star.style.color = ["gold", "#fff3b0", "white"][Math.floor(Math.random() * 3)];
+        star.style.setProperty("--dx", dx + "px");
+        star.style.setProperty("--dy", dy + "px");
+        document.body.appendChild(star);
+        setTimeout(function () { star.remove(); }, 1000);
+      }
+
+      // crumbs from the first bunny's mouth
+      const chipBunny = document.querySelector(".chip-bunny");
+
+      chipBunny.addEventListener("click", function () {
+        const box = chipBunny.getBoundingClientRect();
+        const mouthX = box.left + box.width * 0.57;
+        const mouthY = box.top + box.height * 0.62;
+
+        for (let i = 0; i < 14; i++) {
+          const angle = (20 + Math.random() * 140) * Math.PI / 180;
+          const distance = 40 + Math.random() * 80;
+          makeStar(
+            mouthX,
+            mouthY,
+            Math.cos(angle) * distance,
+            Math.sin(angle) * distance,
+            8 + Math.random() * 8
+          );
+        }
+      });
+
+      // portal bunny jumps out
+      const portal = document.querySelector(".portal");
+      const bunny = document.querySelector(".bunny");
+      let isOpen = false;
+      let busy = false;
+
+      portal.addEventListener("click", function () {
+        if (busy) return;
+        busy = true;
+
+        isOpen = !isOpen;
+        portal.classList.toggle("open", isOpen);
+        portal.classList.toggle("closing", !isOpen);
+
+        const start = bunny.getBoundingClientRect();
+        for (let i = 0; i < 24; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 60 + Math.random() * 120;
+          makeStar(
+            start.left + start.width / 2,
+            start.top + start.height / 2,
+            Math.cos(angle) * distance,
+            Math.sin(angle) * distance,
+            12 + Math.random() * 16
+          );
+        }
+
+        const trail = setInterval(function () {
+          const box = bunny.getBoundingClientRect();
+          makeStar(
+            box.left + box.width / 2 + Math.random() * 40 - 20,
+            box.top + box.height / 2 + Math.random() * 40 - 20,
+            Math.random() * 20 - 10,
+            30,
+            10 + Math.random() * 14
+          );
+        }, 40);
+
+        setTimeout(function () {
+          clearInterval(trail);
+          busy = false;
+        }, 1300);
+      });
+    </script>
   </body>
 </html>
