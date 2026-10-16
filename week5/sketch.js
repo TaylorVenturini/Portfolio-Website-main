@@ -11,6 +11,16 @@ const meter = document.getElementById("meter");
 const log = document.getElementById("log");
 const meme = document.getElementById("meme");
 
+//naomi's added code/ connect script.js to supabase
+const supabaseClient = supabase.createClient(
+  "https://uspxokoxzbajirtyhtjv.supabase.co",
+  "sb_publishable_QfPcMD4M9fWHFAL5oHRznA_7g7g-v5Y"
+);
+
+const saveButton = document.getElementById("save-button");
+
+saveButton.addEventListener("click", saveMeme);
+
 // each bad thing has some text and an emoji (shown if a photo is slow or missing)
 const badThings = [
   { text: "Your phone is at 1%. The charger is in another building.", emoji: "🪫" },
@@ -140,4 +150,21 @@ function startOver() {
   meter.textContent = "Your day is 0% ruined.";
   button.textContent = "[ Make It Worse ]";
   resetButton.hidden = true;
+}
+
+// Naomi's code creating the save function
+async function saveMeme() {
+
+  const { error } = await supabaseClient
+    .from("memes")
+    .insert({
+      image_url: memeImage.src,
+      meme_text: memeText.textContent
+    });
+
+  if (error) {
+    console.error("Could not save meme:", error);
+  } else {
+    console.log("Meme saved!");
+  }
 }
