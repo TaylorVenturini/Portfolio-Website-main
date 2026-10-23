@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rest In Pieces</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- The trash pile. Everything inside is positioned in % of this box,
+       so the peak stays in the same spot on any screen size. -->
+  <div id="stage">
+    <div id="pile"></div>
+    <div id="beam"></div>
+    <div class="candle" style="left:40%;  top:19.5%"></div>
+    <div class="candle" style="left:43.2%; top:16.8%"></div>
+    <div class="candle" style="left:53.8%; top:16.8%"></div>
+    <div class="candle" style="left:57%;  top:19.5%"></div>
+  </div>
+
+  <header>
+    <h1>Rest In Pieces</h1>
+    <p>a shrine for dead technology</p>
+  </header>
+
+  <form id="altar" onsubmit="return false">
+    <input id="name" type="text" maxlength="40" placeholder="what did you lose? (my first iPod)" autocomplete="off">
+    <label id="upload">
+      <input id="file" type="file" accept="image/*">
+      <span>&#9650; lay it to rest</span>
+    </label>
+    <p id="status">upload a photo of your old tech &mdash; or drop it anywhere</p>
+  </form>
+
+  <!-- shared gradients for the wings -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="featherA" x1="0" x2="1">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset="1" stop-color="#d9e2ee"/>
+      </linearGradient>
+      <linearGradient id="featherB" x1="0" x2="1">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset="1" stop-color="#f1ead8"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

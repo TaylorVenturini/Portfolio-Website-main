@@ -288,3 +288,19 @@ header p {
 }
 
 body.dragging #altar { border-color: var(--gold); box-shadow: 0 0 40px rgba(244, 213, 141, .5); }
+
+/* ---------- cut-out relics: no frame, they sit in the pile ---------- */
+.relic img {
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  filter: drop-shadow(0 0 .8vw rgba(255, 215, 140, .45)) drop-shadow(0 .4vw .5vw rgba(0, 0, 0, .85));
+}
+/* when a newer relic takes the peak, the old one loses its wings and joins the heap */
+.relic.buried .wing { animation: fold .8s ease-in forwards; }
+.relic.buried img   { filter: drop-shadow(0 .3vw .4vw #000) brightness(.72) saturate(.8); }
+@keyframes fold {
+  from { transform: scale(1); }
+  to   { transform: scale(0); }
+}
